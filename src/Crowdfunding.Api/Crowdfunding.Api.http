@@ -1,0 +1,6 @@
+@Crowdfunding.Api_HostAddress = http://localhost:5260
+
+GET {{Crowdfunding.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
