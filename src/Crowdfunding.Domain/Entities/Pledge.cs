@@ -9,7 +9,7 @@ public class Pledge
     public Guid UserId { get; set; }
     public Guid RewardId { get; set; }
     public decimal Amount { get; set; }
-    public PledgeStatus Status { get; set; }
+    public PledgeStatus Status { get; private set; }
     public DateTime CreatedAt { get; set; }
     
     private Pledge() { }
@@ -23,5 +23,21 @@ public class Pledge
         Amount = amount;
         Status = PledgeStatus.InProgress;
         CreatedAt = DateTime.UtcNow;
+    }
+    
+    public void Complete()
+    {
+        if (Status != PledgeStatus.InProgress)
+            throw new InvalidOperationException("Only an active pledge can be completed.");
+
+        Status = PledgeStatus.Completed;
+    }
+
+    public void Cancel()
+    {
+        if (Status != PledgeStatus.InProgress)
+            throw new InvalidOperationException("Only an active pledge can be cancelled.");
+
+        Status = PledgeStatus.Cancelled;
     }
 }

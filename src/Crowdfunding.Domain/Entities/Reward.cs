@@ -15,6 +15,9 @@ public class Reward
         {
             throw new ArgumentException("A reward must have title");
         }
+        
+        if (amount <= 0)
+            throw new ArgumentException("Reward amount must be greater than zero.");
 
         Id = Guid.NewGuid();
         Title = title;
