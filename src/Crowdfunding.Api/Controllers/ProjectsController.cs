@@ -26,6 +26,12 @@ public class ProjectsController : ApiControllerBase
         return Created();
     }
     
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        return NoContent();
+    }
+    
     [SwaggerOperation(Summary = "Deletes a project", Description = "Deletes an existing crowdfunding project using its unique identifier.")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)

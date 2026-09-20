@@ -16,7 +16,7 @@ public class PledgesController : ControllerBase
     
     [SwaggerOperation(Summary = "Creates a project pledge", Description = "Creates a new pledge for the specified crowdfunding project.")]
     [HttpPost]
-    public async Task<IActionResult> CreatePledge([FromRoute] Guid projectId, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromRoute] Guid projectId, CancellationToken cancellationToken)
     {
         return Created();
     }

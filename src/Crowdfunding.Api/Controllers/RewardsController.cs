@@ -16,7 +16,7 @@ public class RewardsController : ControllerBase
     
     [SwaggerOperation(Summary = "Creates a project reward", Description = "Creates a new reward for the specified crowdfunding project.")]
     [HttpPost]
-    public async Task<IActionResult> CreateReward([FromRoute] Guid projectId, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromRoute] Guid projectId, CancellationToken cancellationToken)
     {
         return Created();
     }
