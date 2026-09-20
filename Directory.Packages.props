@@ -3,9 +3,14 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
-  
   <ItemGroup Label="Swagger">
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
+  </ItemGroup>
+  
+  <ItemGroup Label="EF Core">
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.30" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.30" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.30" />
   </ItemGroup>
 </Project>
