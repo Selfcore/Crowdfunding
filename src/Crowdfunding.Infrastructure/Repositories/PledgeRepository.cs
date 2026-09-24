@@ -1,35 +1,37 @@
 using Crowdfunding.Application;
 using Crowdfunding.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crowdfunding.Infrastructure.Repositories;
 
 public class PledgeRepository : IRepository<Pledge>
 {
-    private readonly Dictionary<Guid, Pledge> _entities = [];
+    private readonly ApiDbContext _context;
+
+    public PledgeRepository(ApiDbContext context)
+    {
+        _context = context;
+    }
     
-    public Task<Pledge?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Pledge?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        _entities.TryGetValue(id, out var entity);
-
-        return Task.FromResult(entity);
+        return await _context.Pledges.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
-    public Task<IReadOnlyList<Pledge>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Pledge>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        IReadOnlyList<Pledge> result = _entities.Values.ToList();
-
-        return Task.FromResult(result);
+        return await _context.Pledges.ToListAsync(cancellationToken);
     }
 
-    public Task AddAsync(Pledge pledge, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Pledge pledge, CancellationToken cancellationToken = default)
     {
-        _entities.Add(pledge.Id, pledge);
-
-        return Task.CompletedTask;
+        await _context.Pledges.AddAsync(pledge, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public void Delete(Pledge pledge)
+    public async Task Delete(Pledge pledge, CancellationToken cancellationToken = default)
     {
-        _entities.Remove(pledge.Id);
+        _context.Pledges.Remove(pledge);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

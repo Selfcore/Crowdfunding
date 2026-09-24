@@ -1,35 +1,37 @@
 using Crowdfunding.Application;
 using Crowdfunding.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crowdfunding.Infrastructure.Repositories;
 
 public class RewardRepository : IRepository<Reward>
 {
-    private readonly Dictionary<Guid, Reward> _entities = [];
+    private readonly ApiDbContext _context;
+
+    public RewardRepository(ApiDbContext context)
+    {
+        _context = context;
+    }
     
-    public Task<Reward?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Reward?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        _entities.TryGetValue(id, out var entity);
-
-        return Task.FromResult(entity);
+        return await _context.Rewards.FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
-    public Task<IReadOnlyList<Reward>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Reward>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        IReadOnlyList<Reward> result = _entities.Values.ToList();
-
-        return Task.FromResult(result);
+        return await _context.Rewards.ToListAsync(cancellationToken);
     }
 
-    public Task AddAsync(Reward reward, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Reward reward, CancellationToken cancellationToken = default)
     {
-        _entities.Add(reward.Id, reward);
-
-        return Task.CompletedTask;
+        await _context.Rewards.AddAsync(reward, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public void Delete(Reward reward)
+    public async Task Delete(Reward reward, CancellationToken cancellationToken = default)
     {
-        _entities.Remove(reward.Id);
+        _context.Rewards.Remove(reward);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }
