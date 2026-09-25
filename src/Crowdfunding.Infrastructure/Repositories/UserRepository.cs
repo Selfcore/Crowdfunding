@@ -1,36 +1,37 @@
-using System.Collections.Concurrent;
 using Crowdfunding.Application;
 using Crowdfunding.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crowdfunding.Infrastructure.Repositories;
 
 public class UserRepository : IRepository<User>
 {
-    private readonly ConcurrentDictionary<Guid, User> _entities = [];
+    private readonly ApiDbContext _context;
+
+    public UserRepository(ApiDbContext context)
+    {
+        _context = context;
+    }
     
-    public Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        _entities.TryGetValue(id, out var entity);
-
-        return Task.FromResult(entity);
+        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
-    public Task<IReadOnlyList<User>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<User>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        IReadOnlyList<User> result = _entities.Values.ToList();
-
-        return Task.FromResult(result);
+        return await _context.Users.ToListAsync(cancellationToken);
     }
 
-    public Task AddAsync(User user, CancellationToken cancellationToken = default)
+    public async Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
-        _entities.TryAdd(user.Id, user);
-
-        return Task.CompletedTask;
+        await _context.Users.AddAsync(user, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public void Delete(User user)
+    public async Task Delete(User user, CancellationToken cancellationToken = default)
     {
-        _entities.TryRemove(user.Id, out _);
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

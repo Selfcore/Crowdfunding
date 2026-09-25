@@ -7,7 +7,7 @@ public class Pledge
     public Guid Id { get; set; }
     public Guid ProjectId { get; set; }
     public Guid UserId { get; set; }
-    public Guid RewardId { get; set; }
+    public Guid? RewardId { get; set; }
     public decimal Amount { get; set; }
     public PledgeStatus Status { get; private set; }
     public DateTime CreatedAt { get; set; }

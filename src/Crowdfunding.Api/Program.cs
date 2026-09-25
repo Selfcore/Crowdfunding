@@ -1,3 +1,5 @@
+using Crowdfunding.Infrastructure.Configurations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -13,6 +15,8 @@ builder.Services.AddRouting(options =>
     options.LowercaseUrls = true;
     options.LowercaseQueryStrings = true;
 });
+
+builder.Services.AddPersistence(builder.Configuration);
 
 var app = builder.Build();
 
