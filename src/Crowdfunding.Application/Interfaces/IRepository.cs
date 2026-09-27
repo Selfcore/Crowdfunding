@@ -1,4 +1,4 @@
-namespace Crowdfunding.Application;
+namespace Crowdfunding.Application.Interfaces;
 
 public interface IRepository<T> where T : class
 {
