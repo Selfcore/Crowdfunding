@@ -1,5 +1,5 @@
+using Crowdfunding.Application.Dtos.Reward;
 using Crowdfunding.Application.Services;
-using Crowdfunding.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -34,12 +34,12 @@ public class RewardsController : ControllerBase
     
     [SwaggerOperation(Summary = "Creates a project reward", Description = "Creates a new reward for the specified crowdfunding project.")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromRoute] Guid projectId, [FromBody] Reward reward,
+    public async Task<IActionResult> Create([FromRoute] Guid projectId, [FromBody] CreateRewardRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
-            await _projectService.CreateReward(projectId, reward, cancellationToken);
+            await _projectService.CreateReward(projectId, request, cancellationToken);
 
             return Ok(new { message = "Reward created successfully" });
         }
@@ -47,5 +47,18 @@ public class RewardsController : ControllerBase
         {
             return BadRequest(new { message = ex.Message });
         }
+    }
+    
+    [SwaggerOperation(Summary = "Update a project reward", Description = "Updates a reward belonging to the specified project.")]
+    [HttpPut("{rewardId:guid}")]
+    public async Task<IActionResult> Update(
+        [FromRoute] Guid projectId,
+        [FromRoute] Guid rewardId,
+        [FromBody] UpdateRewardRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _projectService.UpdateReward(projectId, rewardId, request, cancellationToken);
+
+        return NoContent();
     }
 }

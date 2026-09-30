@@ -1,5 +1,5 @@
+using Crowdfunding.Application.Dtos.Project;
 using Crowdfunding.Application.Services;
-using Crowdfunding.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -23,6 +23,21 @@ public class ProjectsController : ApiControllerBase
         return Ok(list);
     }
     
+    [HttpGet("{projectId:guid}/details")]
+    public async Task<IActionResult> GetDetails([FromRoute] Guid projectId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var project = await _projectService.GetDetails(projectId, cancellationToken);
+
+            return Ok(project);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+    
     [SwaggerOperation(Summary = "Gets a project by ID", Description = "Retrieves a crowdfunding project using its unique identifier.")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
@@ -37,11 +52,11 @@ public class ProjectsController : ApiControllerBase
     
     [SwaggerOperation(Summary = "Creates a new project", Description = "Creates a new crowdfunding project.")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Project project, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] CreateProjectRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            await _projectService.CreateAsync(project, cancellationToken);
+            await _projectService.CreateAsync(request, cancellationToken);
 
             return Ok(new { message = "Project created successfully" });
         }

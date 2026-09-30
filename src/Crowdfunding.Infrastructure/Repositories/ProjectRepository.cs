@@ -29,6 +29,12 @@ public class ProjectRepository : IRepository<Project>
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateAsync(Project project, CancellationToken cancellationToken = default)
+    {
+        _context.Projects.Update(project);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task Delete(Project project, CancellationToken cancellationToken = default)
     {
         _context.Projects.Remove(project);

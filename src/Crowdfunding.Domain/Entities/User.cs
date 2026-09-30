@@ -31,6 +31,25 @@ public class User
         Balance = 0;
     }
     
+    public void Deposit(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentException("Deposit amount must be greater than zero");
+
+        Balance += amount;
+    }
+
+    public void Withdraw(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentException("Withdrawal amount must be greater than zero");
+
+        if (Balance < amount)
+            throw new InvalidOperationException("Insufficient balance");
+
+        Balance -= amount;
+    }
+    
     private static bool IsValidEmail(string email) 
         => Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase);
 }

@@ -35,6 +35,12 @@ public class RewardRepository : IRewardRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateAsync(Reward reward, CancellationToken cancellationToken = default)
+    {
+        _context.Rewards.Update(reward);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+    
     public async Task Delete(Reward reward, CancellationToken cancellationToken = default)
     {
         _context.Rewards.Remove(reward);

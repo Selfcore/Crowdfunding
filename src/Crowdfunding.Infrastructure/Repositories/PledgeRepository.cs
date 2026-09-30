@@ -34,6 +34,12 @@ public class PledgeRepository : IPledgeRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateAsync(Pledge pledge, CancellationToken cancellationToken = default)
+    {
+        _context.Pledges.Update(pledge);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task Delete(Pledge pledge, CancellationToken cancellationToken = default)
     {
         _context.Pledges.Remove(pledge);

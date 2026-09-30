@@ -1,3 +1,4 @@
+using Crowdfunding.Application.Dtos.Pledge;
 using Crowdfunding.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -35,14 +36,12 @@ public class PledgesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromRoute] Guid projectId, 
-        Guid userId, 
-        decimal amount, 
-        Guid rewardId,
+        [FromBody] CreatePledgeRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
-            var pledge = await _projectService.CreatePledge(projectId, userId, amount, rewardId, cancellationToken);
+            var pledge = await _projectService.CreatePledge(projectId, request, cancellationToken);
 
             return CreatedAtAction(nameof(GetProjectPledges), new { projectId }, pledge);
         }
