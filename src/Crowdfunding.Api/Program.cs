@@ -1,4 +1,8 @@
+using Crowdfunding.Application.Interfaces;
+using Crowdfunding.Application.Services;
+using Crowdfunding.Domain.Entities;
 using Crowdfunding.Infrastructure.Configurations;
+using Crowdfunding.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +21,14 @@ builder.Services.AddRouting(options =>
 });
 
 builder.Services.AddPersistence(builder.Configuration);
+
+builder.Services.AddScoped<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();
+builder.Services.AddScoped<IRewardRepository, RewardRepository>();
+builder.Services.AddScoped<IPledgeRepository, PledgeRepository>();
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ProjectService>();
 
 var app = builder.Build();
 

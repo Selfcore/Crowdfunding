@@ -1,4 +1,4 @@
-using Crowdfunding.Application;
+using Crowdfunding.Application.Interfaces;
 using Crowdfunding.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +26,12 @@ public class ProjectRepository : IRepository<Project>
     public async Task AddAsync(Project project, CancellationToken cancellationToken = default)
     {
         await _context.Projects.AddAsync(project, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateAsync(Project project, CancellationToken cancellationToken = default)
+    {
+        _context.Projects.Update(project);
         await _context.SaveChangesAsync(cancellationToken);
     }
 

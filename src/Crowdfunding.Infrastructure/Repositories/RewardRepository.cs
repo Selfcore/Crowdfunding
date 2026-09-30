@@ -1,10 +1,11 @@
 using Crowdfunding.Application;
+using Crowdfunding.Application.Interfaces;
 using Crowdfunding.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Crowdfunding.Infrastructure.Repositories;
 
-public class RewardRepository : IRepository<Reward>
+public class RewardRepository : IRewardRepository
 {
     private readonly ApiDbContext _context;
 
@@ -22,6 +23,11 @@ public class RewardRepository : IRepository<Reward>
     {
         return await _context.Rewards.ToListAsync(cancellationToken);
     }
+    
+    public async Task<IReadOnlyList<Reward>> GetByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Rewards.Where(p => p.ProjectId == projectId).ToListAsync(cancellationToken);
+    }
 
     public async Task AddAsync(Reward reward, CancellationToken cancellationToken = default)
     {
@@ -29,6 +35,12 @@ public class RewardRepository : IRepository<Reward>
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateAsync(Reward reward, CancellationToken cancellationToken = default)
+    {
+        _context.Rewards.Update(reward);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+    
     public async Task Delete(Reward reward, CancellationToken cancellationToken = default)
     {
         _context.Rewards.Remove(reward);
