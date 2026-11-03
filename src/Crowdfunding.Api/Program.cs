@@ -1,8 +1,9 @@
 using Crowdfunding.Application.Interfaces;
 using Crowdfunding.Application.Services;
 using Crowdfunding.Domain.Entities;
-using Crowdfunding.Infrastructure.Configurations;
-using Crowdfunding.Infrastructure.Repositories;
+using Crowdfunding.Infrastructure.Postgres;
+using Crowdfunding.Infrastructure.Postgres.Configurations;
+using Crowdfunding.Infrastructure.Postgres.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();
 builder.Services.AddScoped<IRewardRepository, RewardRepository>();
 builder.Services.AddScoped<IPledgeRepository, PledgeRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProjectService>();

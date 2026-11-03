@@ -14,14 +14,16 @@ public class ProjectService
     private readonly IRewardRepository _rewardRepository;
     private readonly IPledgeRepository _pledgeRepository;
     private readonly IRepository<User> _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
     
     public ProjectService(IRepository<Project> projectRepository, IRewardRepository rewardRepository,
-        IPledgeRepository pledgeRepository, IRepository<User> userRepository)
+        IPledgeRepository pledgeRepository, IRepository<User> userRepository, IUnitOfWork unitOfWork)
     {
         _projectRepository = projectRepository;
         _rewardRepository = rewardRepository;
         _pledgeRepository = pledgeRepository;
         _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<IReadOnlyList<Project>> GetAll(CancellationToken cancellationToken = default)
@@ -115,6 +117,7 @@ public class ProjectService
         Reward newReward = new Reward(projectId, request.Title, request.Amount);
         
         await _rewardRepository.AddAsync(newReward, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
     
     public async Task UpdateReward(
@@ -185,6 +188,7 @@ public class ProjectService
         };
         
         await _pledgeRepository.AddAsync(pledge, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
         
         return pledge;
     }
@@ -194,6 +198,7 @@ public class ProjectService
         Project newProject = new Project(request.AuthorId, request.Title, request.Description, request.Threshold);
         
         await _projectRepository.AddAsync(newProject, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Delete(Guid id, CancellationToken cancellationToken = default)

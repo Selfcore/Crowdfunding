@@ -14,7 +14,9 @@ public class UserTests
 
         Assert.NotEqual(Guid.Empty, user.Id);
         Assert.Equal("John Doe", user.Name);
-        Assert.Equal("john@example.com", user.Email);
+        Assert.Equal("john@example.com", user.Email.Address);
+        Assert.Equal("john", user.Email.User);
+        Assert.Equal("example.com", user.Email.Host);
         Assert.Equal(0m, user.Balance);
     }
 
@@ -30,18 +32,19 @@ public class UserTests
     }
 
     [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("   ")]
     [InlineData("test")]
     [InlineData("test@")]
     [InlineData("@example.com")]
     [InlineData("test@example")]
-    public void Constructor_ShouldThrow_WhenEmailIsInvalid(string email)
+    [InlineData("test@@example.com")]
+    [InlineData("test user@example.com")]
+    public void Constructor_ShouldThrow_WhenEmailFormatIsInvalid(string email)
     {
-        var exception = Assert.Throws<ArgumentException>(() => new User("John", email));
+        var exception = Assert.Throws<ArgumentException>(
+            () => new User("John", email));
 
-        Assert.Equal("Invalid email format", exception.Message);
+        Assert.StartsWith("Invalid email format.", exception.Message);
+        Assert.Equal("email", exception.ParamName);
     }
 
     [Theory]
