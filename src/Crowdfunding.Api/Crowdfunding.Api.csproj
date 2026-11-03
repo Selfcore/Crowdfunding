@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Crowdfunding.Application\Crowdfunding.Application.csproj" />
-    <ProjectReference Include="..\Crowdfunding.Infrastructure\Crowdfunding.Infrastructure.csproj" />
+    <ProjectReference Include="..\Crowdfunding.Infrastructure.Postgres\Crowdfunding.Infrastructure.Postgres.csproj" />
   </ItemGroup>
 
 </Project>

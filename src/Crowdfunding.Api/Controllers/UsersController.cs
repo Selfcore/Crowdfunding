@@ -1,4 +1,5 @@
 using Crowdfunding.Application;
+using Crowdfunding.Application.Dtos.User;
 using Crowdfunding.Application.Services;
 using Crowdfunding.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -38,11 +39,11 @@ public class UsersController : ApiControllerBase
     
     [SwaggerOperation(Summary = "Creates a new user", Description = "Creates a new user.")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] User user, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            await _userService.CreateAsync(user, cancellationToken);
+            await _userService.CreateAsync(request, cancellationToken);
 
             return Ok(new { message = "User created successfully" });
         }

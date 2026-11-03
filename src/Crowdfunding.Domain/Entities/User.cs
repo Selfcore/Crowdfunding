@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Crowdfunding.Domain.Value_Objects;
 
 namespace Crowdfunding.Domain.Entities;
 
@@ -6,7 +7,7 @@ public class User
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string Email { get; set; }
+    public Email Email { get; set; }
     public decimal Balance { get; set; }
     
     private User() { }
@@ -17,17 +18,10 @@ public class User
         {
             throw new ArgumentException("A user must have name");
         }
-
-        email = email.Trim();        
-        
-        if (!IsValidEmail(email))
-        {
-            throw new ArgumentException("Invalid email format");
-        }
         
         Id = Guid.NewGuid();
         Name = name.Trim();
-        Email = email;
+        Email = Email.Create(email);
         Balance = 0;
     }
     
@@ -49,7 +43,4 @@ public class User
 
         Balance -= amount;
     }
-    
-    private static bool IsValidEmail(string email) 
-        => Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase);
 }
