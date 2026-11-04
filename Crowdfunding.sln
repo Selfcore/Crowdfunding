@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowdfunding.Domain.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowdfunding.Infrastructure.Postgres", "src\Crowdfunding.Infrastructure.Postgres\Crowdfunding.Infrastructure.Postgres.csproj", "{7C6E4F4E-7ADA-4596-9402-FF704F934AD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowdfunding.IntegrationTests", "tests\Crowdfunding.IntegrationTests\Crowdfunding.IntegrationTests.csproj", "{259FCFB5-CFE0-4568-A48F-A8ED61A58B7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{7C6E4F4E-7ADA-4596-9402-FF704F934AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C6E4F4E-7ADA-4596-9402-FF704F934AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C6E4F4E-7ADA-4596-9402-FF704F934AD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{259FCFB5-CFE0-4568-A48F-A8ED61A58B7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259FCFB5-CFE0-4568-A48F-A8ED61A58B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{259FCFB5-CFE0-4568-A48F-A8ED61A58B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{259FCFB5-CFE0-4568-A48F-A8ED61A58B7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D4D65D5F-27EF-4D49-8160-4232E157B1D2} = {ADE255E6-8DCD-488C-8B96-5C0E8E68171D}
@@ -60,5 +66,6 @@ Global
 		{1B217791-BCF1-42DB-ACE4-34BB93E8778D} = {ADE255E6-8DCD-488C-8B96-5C0E8E68171D}
 		{584A4E1B-FE04-46AA-B0BA-3911F5736B26} = {3E4EC97B-7E76-4EFC-8136-715823C43A47}
 		{7C6E4F4E-7ADA-4596-9402-FF704F934AD9} = {ADE255E6-8DCD-488C-8B96-5C0E8E68171D}
+		{259FCFB5-CFE0-4568-A48F-A8ED61A58B7A} = {3E4EC97B-7E76-4EFC-8136-715823C43A47}
 	EndGlobalSection
 EndGlobal
