@@ -6,9 +6,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__PostgreSQL: "Host=db;Port=5432;Database=crowdfunding_db;Username=postgres;Password=postgres;Maximum Pool Size=100;Minimum Pool Size=10"
+      ConnectionStrings__Redis: "redis:6379,abortConnect=false"
     depends_on: 
       db:
         condition: service_healthy
+    networks:
+      - crowdfunding
 
   db:
     image: postgres:17-alpine
@@ -22,6 +25,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres -d crowdfunding_db"]
       interval: 5s 
       timeout: 5s
+    networks:
+      - crowdfunding
 
   adminer:
     image: adminer:latest
@@ -29,6 +34,19 @@ services:
     environment:
       ADMINER_DEFAULT_SERVER: db
     depends_on: [db]
+    networks:
+      - crowdfunding
+    
+  redis:
+    image: redis:8.6.8
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - crowdfunding
 
 volumes:
   db-data: {}
