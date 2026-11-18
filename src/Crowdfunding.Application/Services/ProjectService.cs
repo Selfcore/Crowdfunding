@@ -3,6 +3,7 @@ using Crowdfunding.Application.Dtos.Project;
 using Crowdfunding.Application.Dtos.Reward;
 using Crowdfunding.Application.Dtos.User;
 using Crowdfunding.Application.Interfaces;
+using Crowdfunding.Application.Interfaces.Caching;
 using Crowdfunding.Domain.Entities;
 using Crowdfunding.Domain.Enums;
 
@@ -15,15 +16,20 @@ public class ProjectService
     private readonly IPledgeRepository _pledgeRepository;
     private readonly IRepository<User> _userRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICacheService _cacheService;
+    private readonly ICacheInvalidator _cacheInvalidator;
     
     public ProjectService(IRepository<Project> projectRepository, IRewardRepository rewardRepository,
-        IPledgeRepository pledgeRepository, IRepository<User> userRepository, IUnitOfWork unitOfWork)
+        IPledgeRepository pledgeRepository, IRepository<User> userRepository, IUnitOfWork unitOfWork,
+        ICacheService cacheService, ICacheInvalidator cacheInvalidator)
     {
         _projectRepository = projectRepository;
         _rewardRepository = rewardRepository;
         _pledgeRepository = pledgeRepository;
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
+        _cacheService = cacheService;
+        _cacheInvalidator = cacheInvalidator;
     }
     
     public async Task<IReadOnlyList<Project>> GetAll(CancellationToken cancellationToken = default)
@@ -38,6 +44,13 @@ public class ProjectService
     
     public async Task<ProjectDetailsResponse> GetDetails(Guid projectId, CancellationToken cancellationToken = default)
     {
+        var cacheKey = $"project:{projectId}:details";
+
+        var cached = await _cacheService.GetAsync<ProjectDetailsResponse>(cacheKey, cancellationToken);
+
+        if (cached is not null)
+            return cached;
+        
         var project = await GetById(projectId, cancellationToken);
 
         if (project == null)
@@ -55,7 +68,7 @@ public class ProjectService
 
         var progress = project.Threshold > 0 ? collectedAmount / project.Threshold * 100 : 0;
 
-        return new ProjectDetailsResponse
+        var response = new ProjectDetailsResponse
         {
             Id = project.Id,
             Title = project.Title,
@@ -71,7 +84,7 @@ public class ProjectService
                 Id = author.Id,
                 Name = author.Name
             },
-            
+
             Rewards = rewards.Select(r => new RewardResponse
             {
                 Id = r.Id,
@@ -79,6 +92,10 @@ public class ProjectService
                 Amount = r.Amount
             }).ToList()
         };
+
+        await _cacheService.SetAsync(cacheKey, response, TimeSpan.FromMinutes(10), cancellationToken);
+        
+        return response;
     }
 
     public async Task<IReadOnlyList<Pledge>> GetAllPledges(Guid targetId,
@@ -97,6 +114,13 @@ public class ProjectService
     public async Task<IReadOnlyList<Reward>> GetAllRewards(Guid targetId,
         CancellationToken cancellationToken = default)
     {
+        var cacheKey = $"project:{targetId}:rewards";
+        
+        var cached = await _cacheService.GetAsync<IReadOnlyList<Reward>>(cacheKey, cancellationToken);
+        
+        if (cached is not null)
+            return cached;
+        
         var target = await GetById(targetId, cancellationToken);
         
         if(target == null)
@@ -104,6 +128,8 @@ public class ProjectService
 
         var rewards = await _rewardRepository.GetByProjectIdAsync(targetId, cancellationToken);
 
+        await _cacheService.SetAsync(cacheKey, rewards, TimeSpan.FromMinutes(10), cancellationToken);
+        
         return rewards;
     }
 
@@ -118,6 +144,7 @@ public class ProjectService
         
         await _rewardRepository.AddAsync(newReward, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _cacheInvalidator.RemoveByPrefixAsync($"project:{targetProject.Id}", cancellationToken);
     }
     
     public async Task UpdateReward(
@@ -142,6 +169,7 @@ public class ProjectService
         reward.Update(request.Title, request.Amount);
         
         await _rewardRepository.UpdateAsync(reward, cancellationToken);
+        await _cacheInvalidator.RemoveByPrefixAsync($"project:{project.Id}", cancellationToken);
     }
     
     public async Task<Pledge> CreatePledge(Guid projectId, CreatePledgeRequest request, CancellationToken cancellationToken = default)
@@ -189,6 +217,7 @@ public class ProjectService
         
         await _pledgeRepository.AddAsync(pledge, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _cacheInvalidator.RemoveByPrefixAsync($"project:{project.Id}", cancellationToken);
         
         return pledge;
     }
@@ -209,5 +238,6 @@ public class ProjectService
             throw new Exception("Project not found");
         
         await _projectRepository.Delete(targetProject, cancellationToken);
+        await _cacheInvalidator.RemoveByPrefixAsync($"project:{targetProject.Id}", cancellationToken);
     }
 }
