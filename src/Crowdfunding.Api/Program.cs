@@ -1,9 +1,8 @@
 using Crowdfunding.Application.Interfaces;
-using Crowdfunding.Application.Interfaces.Caching;
 using Crowdfunding.Application.Services;
+using Crowdfunding.BackgroundWorkers;
 using Crowdfunding.Domain.Entities;
 using Crowdfunding.Infrastructure.Postgres;
-using Crowdfunding.Infrastructure.Postgres.Caching;
 using Crowdfunding.Infrastructure.Postgres.Configurations;
 using Crowdfunding.Infrastructure.Postgres.Repositories;
 
@@ -25,6 +24,10 @@ builder.Services.AddRouting(options =>
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddCaching(builder.Configuration);
+
+builder.Services.AddSingleton<IEventProducer, KafkaProducer>();
+
+builder.Services.AddBackgroundWorkers();
 
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();

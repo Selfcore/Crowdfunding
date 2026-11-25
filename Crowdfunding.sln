@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowdfunding.IntegrationTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowdfunding.PerformanceTests", "tests\Crowdfunding.PerformanceTests\Crowdfunding.PerformanceTests.csproj", "{161B162E-E1C6-4E67-8FC9-67CCF24B5835}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowdfunding.BackgroundWorkers", "src\Crowdfunding.BackgroundWorkers\Crowdfunding.BackgroundWorkers.csproj", "{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,18 @@ Global
 		{161B162E-E1C6-4E67-8FC9-67CCF24B5835}.Release|x64.Build.0 = Release|Any CPU
 		{161B162E-E1C6-4E67-8FC9-67CCF24B5835}.Release|x86.ActiveCfg = Release|Any CPU
 		{161B162E-E1C6-4E67-8FC9-67CCF24B5835}.Release|x86.Build.0 = Release|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Debug|x64.Build.0 = Debug|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Debug|x86.Build.0 = Debug|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Release|x64.ActiveCfg = Release|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Release|x64.Build.0 = Release|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,5 +156,6 @@ Global
 		{7C6E4F4E-7ADA-4596-9402-FF704F934AD9} = {ADE255E6-8DCD-488C-8B96-5C0E8E68171D}
 		{259FCFB5-CFE0-4568-A48F-A8ED61A58B7A} = {3E4EC97B-7E76-4EFC-8136-715823C43A47}
 		{161B162E-E1C6-4E67-8FC9-67CCF24B5835} = {3E4EC97B-7E76-4EFC-8136-715823C43A47}
+		{DD7F6C5A-74CE-423E-97B0-F1B5AEE12B0E} = {ADE255E6-8DCD-488C-8B96-5C0E8E68171D}
 	EndGlobalSection
 EndGlobal

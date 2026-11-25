@@ -2,6 +2,7 @@ using Crowdfunding.Application.Dtos.Pledge;
 using Crowdfunding.Application.Dtos.Project;
 using Crowdfunding.Application.Dtos.Reward;
 using Crowdfunding.Application.Dtos.User;
+using Crowdfunding.Application.Events;
 using Crowdfunding.Application.Interfaces;
 using Crowdfunding.Application.Interfaces.Caching;
 using Crowdfunding.Domain.Entities;
@@ -18,10 +19,11 @@ public class ProjectService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
     private readonly ICacheInvalidator _cacheInvalidator;
+    private readonly IEventProducer _eventProducer;
     
     public ProjectService(IRepository<Project> projectRepository, IRewardRepository rewardRepository,
         IPledgeRepository pledgeRepository, IRepository<User> userRepository, IUnitOfWork unitOfWork,
-        ICacheService cacheService, ICacheInvalidator cacheInvalidator)
+        ICacheService cacheService, ICacheInvalidator cacheInvalidator, IEventProducer eventProducer)
     {
         _projectRepository = projectRepository;
         _rewardRepository = rewardRepository;
@@ -30,6 +32,7 @@ public class ProjectService
         _unitOfWork = unitOfWork;
         _cacheService = cacheService;
         _cacheInvalidator = cacheInvalidator;
+        _eventProducer = eventProducer;
     }
     
     public async Task<IReadOnlyList<Project>> GetAll(CancellationToken cancellationToken = default)
@@ -228,6 +231,19 @@ public class ProjectService
         
         await _projectRepository.AddAsync(newProject, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var @event = new ProjectCreatedEvent(
+            ProjectId: newProject.Id,
+            AuthorId: newProject.AuthorId,
+            Title: newProject.Title,
+            Threshold: newProject.Threshold,
+            CreatedAt: DateTime.Now);
+        
+        await _eventProducer.PublishAsync(
+            "project-created", 
+            newProject.Id.ToString(), 
+            @event, 
+            cancellationToken);
     }
 
     public async Task Delete(Guid id, CancellationToken cancellationToken = default)

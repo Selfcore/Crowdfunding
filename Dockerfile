@@ -9,6 +9,7 @@ COPY src/Crowdfunding.Domain/Crowdfunding.Domain.csproj src/Crowdfunding.Domain/
 COPY src/Crowdfunding.Application/Crowdfunding.Application.csproj src/Crowdfunding.Application/
 COPY src/Crowdfunding.Infrastructure.Postgres/Crowdfunding.Infrastructure.Postgres.csproj src/Crowdfunding.Infrastructure.Postgres/
 COPY src/Crowdfunding.Api/Crowdfunding.Api.csproj src/Crowdfunding.Api/
+COPY src/Crowdfunding.BackgroundWorkers/Crowdfunding.BackgroundWorkers.csproj src/Crowdfunding.BackgroundWorkers/
 
 RUN dotnet restore src/Crowdfunding.Api/Crowdfunding.Api.csproj
 

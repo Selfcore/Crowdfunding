@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Crowdfunding.Application\Crowdfunding.Application.csproj" />
+    <ProjectReference Include="..\Crowdfunding.BackgroundWorkers\Crowdfunding.BackgroundWorkers.csproj" />
     <ProjectReference Include="..\Crowdfunding.Infrastructure.Postgres\Crowdfunding.Infrastructure.Postgres.csproj" />
   </ItemGroup>
 
